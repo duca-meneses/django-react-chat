@@ -12,9 +12,13 @@ class ServerListView(viewsets.ViewSet):
 
     def list(self, request):
         category = request.query_params.get('category')
+        quantity = request.query_params.get('qty')
 
         if category:
             self.queryset = self.queryset.filter(category__name=category)
+
+        if quantity:
+            self.queryset = self.queryset[: int(quantity)]
 
         serializer = ServerSerializer(self.queryset, many=True)
         return Response(serializer.data)
